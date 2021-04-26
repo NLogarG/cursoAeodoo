@@ -18,6 +18,9 @@
             <field name="arch" type="xml">
                 <form string="Ticket">
                     <header>
+                        <button string="Asignar" name="asignar" type="obeject" states="nuevo"/> 
+                        <button string="En proceso" name="proceso" type="obeject" states="asignado"/> 
+                        <button string="Finalizar" name="finalizar" type="obeject" states="nuevo,asignado,pendiente,proceso"/> 
                         <field name="state" widget="statusbar"/>
                     </header>
 
@@ -34,13 +37,25 @@
                             <field name="date_limit"/>
                         </group>
                         <group>
+                            <field name="user_id"/>
                             <field name="assigned"/>
+                            <field name="ticket_qty"/>
                             <field name="time"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="Description">
                             <field name="description"/>
+                            <group>
+                                <field name="tag_name"/>
+                                <button string="Create tag"
+                                name="create_tag"
+                                type="object"/>
+                            </group>
+                            <field name="tag_ids"/>
+                        </page>
+                        <page string="Actions">
+                            <field name="action_ids"/>
                         </page>
                         <page string="Quality">
                             <group>
@@ -61,5 +76,42 @@
             </field>
         </record>
 
+        <record id="view_helpdesk_ticket_search" model="ir.ui.view">
+            <field name="name">view.helpdesk_ticket.search</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <search string="Ticket">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <filter string="Assigned" name="assigned_to" domain="[('user_id', '!=', False)]"/>
+                    <filter string="No date limit" name="date_limit" domain="[('date_limit', '!=', False)]"/>
+                    <filter string="Date Limit" name="date_limit" context="{'group_by':'date_limit'}"/>
+                    <filter string="Assigned to" name="user_id" context="{'group_by':'user_id'}"/>
+                    
+                </search>
+            </field>
+        </record>
 
+        <record id="view_helpdesk_ticket_pivot" model="ir.ui.view">
+            <field name="name">view.helpdesk_ticket.pivot</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Ticket">
+                    <field name="user_id" type="row"/>
+                    <field name="date" interval="month" type="col"/>
+                    <field name="time" type="measure" widget="float_time"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_helpdesk_ticket_graph" model="ir.ui.view">
+            <field name="name">view.helpdesk_ticket.graph</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <graph>
+                    <field name="user_id"/>
+                    <field name="time" type="measure" widget="float_time"/>
+                </graph>
+            </field>
+        </record>
 </odoo>
