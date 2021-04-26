@@ -114,4 +114,35 @@
                 </graph>
             </field>
         </record>
+
+
+        <record id="view_helpdesk_ticket_calendar" model="ir.ui.view">
+            <field name="name">view.helpdesk_ticket.calendar</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <calendar string="Tickets" date_start="date" color="user_id" hide_time="true" event_limit="5">
+                    <field name="user_id" avatar_field="image_128"/>
+                    <field name="name"/>
+                    <field name="user_id" filters="1" invisible="1"/>
+                </calendar>
+            </field>
+        </record>
+
+
+        <record id="view_helpdesk_ticket_kanban" model="ir.ui.view">
+            <field name="name">view.helpdesk_ticket.calendar</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="user_id">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_content">
+                                Name: <field name="name"/>
+                                <br/>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
 </odoo>
